@@ -23,20 +23,37 @@ function ChatBox() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://chatbot-backend-stbs.onrender.com/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
-      });
+      const response = await fetch(
+        "https://chatbot-backend-stbs.onrender.com/chat", // ✅ Render 백엔드 주소
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
       const data = await response.json();
 
-      // GPT 답변 + 참고 문서 청크
-      setMessages([...newMessages, { sender: "bot", text: data.reply }]);
-    } catch (error) {
-      console.error(error);
       setMessages([
         ...newMessages,
-        { sender: "bot", text: "서버 오류가 발생했습니다." },
+        {
+          sender: "bot",
+          text: data.reply || "답변을 가져올 수 없습니다.",
+          context: data.context || [], // ✅ 참고 문서 추가
+        },
+      ]);
+    } catch (error) {
+      console.error("❌ 서버 오류:", error);
+      setMessages([
+        ...newMessages,
+        {
+          sender: "bot",
+          text: "⚠️ 로딩중입니다. 잠시 후 다시 시도해주세요.",
+        },
       ]);
     } finally {
       setInput("");
