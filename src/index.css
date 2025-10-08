@@ -1,0 +1,20 @@
+/* src/index.css */
+
+/* 1️⃣ Tailwind 기본 스타일 (reset 포함) */
+@tailwind base;
+
+/* 2️⃣ Tailwind 컴포넌트 스타일 */
+@tailwind components;
+
+/* 3️⃣ Tailwind 유틸리티 클래스 */
+@tailwind utilities;
+
+/* 4️⃣ 필요하면 커스텀 CSS 추가 가능 */
+body {
+  @apply bg-gray-50 text-gray-900; /* Tailwind apply 사용 가능 */
+  font-family: "Inter", sans-serif;
+}
+
+h2 {
+  @apply text-2xl font-semibold;
+}
